@@ -24,7 +24,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ player, onEndGame }) => {
 
   // Refs for timers to avoid closure stale state
   const questionStartTimeRef = useRef<number>(0);
-  const questionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const questionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const questionNumberRef = useRef(1);
   
   // Generate a new question
