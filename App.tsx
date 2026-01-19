@@ -10,6 +10,7 @@ const App: React.FC = () => {
   const [screen, setScreen] = useState<ScreenState>(ScreenState.START);
   const [player, setPlayer] = useState<Player>({ name: '', className: '' });
   const [finalScore, setFinalScore] = useState(0);
+  const [isScoreSaved, setIsScoreSaved] = useState(false); // New state to track if ranked
 
   const handleStartGame = (newPlayer: Player) => {
     setPlayer(newPlayer);
@@ -18,14 +19,16 @@ const App: React.FC = () => {
 
   const handleEndGame = async (score: number, correctCount: number) => {
     setFinalScore(score);
-    // Async save to Firebase, ensuring data consistency before navigation if needed
-    await saveScore(player.name, player.className, score);
+    // Cuba simpan markah. saveScore akan return false jika luar waktu sekolah.
+    const saved = await saveScore(player.name, player.className, score);
+    setIsScoreSaved(saved);
     setScreen(ScreenState.GAME_OVER);
   };
 
   const handleRestart = () => {
     setScreen(ScreenState.START);
     setFinalScore(0);
+    setIsScoreSaved(false);
   };
 
   return (
@@ -56,6 +59,7 @@ const App: React.FC = () => {
       {screen === ScreenState.GAME_OVER && (
         <GameOverScreen 
           score={finalScore}
+          isScoreSaved={isScoreSaved}
           onRestart={handleRestart}
           onShowLeaderboard={() => setScreen(ScreenState.LEADERBOARD)}
         />
