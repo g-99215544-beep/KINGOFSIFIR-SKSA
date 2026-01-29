@@ -57,9 +57,11 @@ const App: React.FC = () => {
       )}
 
       {screen === ScreenState.GAME_OVER && (
-        <GameOverScreen 
+        <GameOverScreen
           score={finalScore}
           isScoreSaved={isScoreSaved}
+          playerName={player.name}
+          playerClass={player.className}
           onRestart={handleRestart}
           onShowLeaderboard={() => setScreen(ScreenState.LEADERBOARD)}
         />
